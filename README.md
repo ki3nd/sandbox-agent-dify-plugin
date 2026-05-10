@@ -1,5 +1,10 @@
 # Sandbox Agent
 
+**Author:** [ki3nd](https://github.com/ki3nd)   
+**Type:** Agent Strategy   
+**Github Repo:** https://github.com/ki3nd/sandbox-agent-dify-plugin   
+**Github Issues:** https://github.com/ki3nd/sandbox-agent-dify-plugin/issues    
+
 A Dify plugin that provides a ReAct agent strategy with remote sandbox execution capabilities.
 
 ## Features
