@@ -1,0 +1,19 @@
+identity:
+  author: ki3nd
+  name: sandbox-agent
+  label:
+    en_US: "Sandbox Agent"
+    zh_Hans: "沙箱代理"
+    ja_JP: "サンドボックスエージェント"
+    pt_BR: "Sandbox Agent"
+  description:
+    en_US: "ReAct agent strategy with remote sandbox execution. Runs shell commands inside an isolated E2B or Daytona sandbox."
+    zh_Hans: "具有远程沙箱执行能力的 ReAct 代理策略，在隔离的 E2B 或 Daytona 沙箱中执行 shell 命令。"
+    ja_JP: "リモートサンドボックス実行機能を持つ ReAct エージェント戦略。E2B または Daytona の隔離されたサンドボックス内でシェルコマンドを実行します。"
+    pt_BR: "Estratégia de agente ReAct com execução em sandbox remoto. Executa comandos shell em um sandbox isolado E2B ou Daytona."
+  icon: icon.svg
+strategies:
+  - strategies/sandbox-agent.yaml
+extra:
+  python:
+    source: provider/sandbox-agent.py

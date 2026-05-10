@@ -1,0 +1,161 @@
+identity:
+  name: sandbox-agent
+  author: ki3nd
+  label:
+    en_US: "Sandbox Agent"
+    zh_Hans: "沙箱代理"
+    ja_JP: "サンドボックスエージェント"
+    pt_BR: "Agente Sandbox"
+description:
+  en_US: "ReAct agent with sandbox execution. Connects to E2B or Daytona sandboxes for code execution, file operations, and skill-based automation."
+  zh_Hans: "具有沙箱执行能力的ReAct代理。连接到E2B或Daytona沙箱进行代码执行、文件操作和基于技能的自动化。"
+  ja_JP: "サンドボックス実行機能を持つReActエージェント。E2BまたはDaytonaサンドボックスに接続し、コード実行、ファイル操作、スキルベースの自動化を行います。"
+  pt_BR: "Agente ReAct com execução em sandbox. Conecta a sandboxes E2B ou Daytona para execução de código, operações de arquivo e automação baseada em habilidades."
+
+parameters:
+  # === Standard Dify Parameters ===
+  - name: model
+    type: model-selector
+    scope: tool-call&llm
+    required: true
+    label:
+      en_US: Model
+      zh_Hans: 模型
+      ja_JP: モデル
+      pt_BR: Model
+    human_description:
+      en_US: LLM for ReAct reasoning. Must support function calling.
+      zh_Hans: 用于ReAct推理的LLM。必须支持函数调用。
+      ja_JP: ReAct推論用のLLM。関数呼び出しをサポートする必要があります。
+      pt_BR: LLM para raciocínio ReAct. Deve suportar chamada de função.
+
+  - name: tools
+    type: array[tools]
+    required: false
+    label:
+      en_US: Additional Tools
+      zh_Hans: 附加工具
+      ja_JP: 追加ツール
+      pt_BR: Ferramentas Adicionais
+    human_description:
+      en_US: Dify built-in and custom tools. Built-in sandbox tools (exec_command, view_image, apply_patch) are always available.
+      zh_Hans: Dify内置和自定义工具。内置沙箱工具（exec_command、view_image、apply_patch）始终可用。
+      ja_JP: Dify組み込みおよびカスタムツール。組み込みサンドボックスツール（exec_command、view_image、apply_patch）は常に利用可能です。
+      pt_BR: Ferramentas integradas e personalizadas do Dify. Ferramentas sandbox integradas (exec_command, view_image, apply_patch) estão sempre disponíveis.
+
+  - name: query
+    type: string
+    required: true
+    label:
+      en_US: Query
+      zh_Hans: 查询
+      ja_JP: クエリ
+      pt_BR: Consulta
+
+  - name: instruction
+    type: string
+    required: true
+    label:
+      en_US: Instruction
+      zh_Hans: 指令
+      ja_JP: 指示
+      pt_BR: Instrução
+    human_description:
+      en_US: System prompt appended to the agent's base instructions. Use to customize agent behavior, set persona, or add domain-specific rules.
+      zh_Hans: 附加到代理基础指令的系统提示。用于自定义代理行为、设置角色或添加领域特定规则。
+      ja_JP: エージェントの基本指示に追加されるシステムプロンプト。エージェントの動作のカスタマイズ、ペルソナの設定、またはドメイン固有のルールの追加に使用します。
+      pt_BR: Prompt de sistema adicionado às instruções base do agente. Use para personalizar o comportamento, definir persona ou adicionar regras específicas do domínio.
+    auto_generate:
+      type: prompt_instruction
+    template:
+      enabled: true
+
+  # === Sandbox Configuration ===
+  - name: sandbox_id
+    type: string
+    required: true
+    label:
+      en_US: Sandbox ID
+      zh_Hans: 沙箱ID
+      ja_JP: サンドボックスID
+      pt_BR: ID do Sandbox
+    human_description:
+      en_US: ID of existing sandbox to connect to. Create sandbox via provider dashboard first.
+      zh_Hans: 要连接的现有沙箱ID。请先通过提供商仪表板创建沙箱。
+      ja_JP: 接続する既存のサンドボックスID。最初にプロバイダーダッシュボードでサンドボックスを作成してください。
+      pt_BR: ID do sandbox existente para conectar. Crie o sandbox pelo painel do provedor primeiro.
+
+  - name: sandbox_config
+    type: string
+    required: false
+    form: yaml
+    label:
+      en_US: Sandbox Config
+      zh_Hans: 沙箱配置
+      ja_JP: サンドボックス設定
+      pt_BR: Configuração do Sandbox
+    human_description:
+      en_US: "YAML configuration for sandbox. Example:\nprovider: daytona\nworkspace_root: /home/daytona/workspace\nskills_paths:\n  - /home/daytona/workspace/.skills\nexec_timeout: 30\nmax_output_chars: 8000"
+      zh_Hans: "沙箱的YAML配置。示例：\nprovider: daytona\nworkspace_root: /home/daytona/workspace\nskills_paths:\n  - /home/daytona/workspace/.skills\nexec_timeout: 30\nmax_output_chars: 8000"
+      ja_JP: "サンドボックスのYAML設定。例：\nprovider: daytona\nworkspace_root: /home/daytona/workspace\nskills_paths:\n  - /home/daytona/workspace/.skills\nexec_timeout: 30\nmax_output_chars: 8000"
+      pt_BR: "Configuração YAML para o sandbox. Exemplo:\nprovider: daytona\nworkspace_root: /home/daytona/workspace\nskills_paths:\n  - /home/daytona/workspace/.skills\nexec_timeout: 30\nmax_output_chars: 8000"
+    default: |
+      provider: daytona
+      workspace_root: /home/daytona/workspace
+      skills_paths: []
+      exec_timeout: 30
+      connect_timeout: 60
+      max_output_chars: 8000
+
+  - name: sandbox_api_key
+    type: secret-input
+    required: true
+    label:
+      en_US: Sandbox API Key
+      zh_Hans: 沙箱API密钥
+      ja_JP: サンドボックスAPIキー
+      pt_BR: Chave de API do Sandbox
+    human_description:
+      en_US: API key for sandbox provider (E2B or Daytona).
+      zh_Hans: 沙箱提供商（E2B或Daytona）的API密钥。
+      ja_JP: サンドボックスプロバイダー（E2BまたはDaytona）のAPIキー。
+      pt_BR: Chave de API do provedor de sandbox (E2B ou Daytona).
+
+  # === Memory & History ===
+  - name: maximum_iterations
+    type: number
+    required: false
+    default: 20
+    min: 1
+    max: 100
+    label:
+      en_US: Max Iterations
+      zh_Hans: 最大迭代次数
+      ja_JP: 最大反復回数
+      pt_BR: Máximo de Iterações
+    human_description:
+      en_US: Maximum ReAct loop iterations before stopping.
+      zh_Hans: 停止前的最大ReAct循环迭代次数。
+      ja_JP: 停止前のReActループの最大反復回数。
+      pt_BR: Número máximo de iterações do loop ReAct antes de parar.
+
+  - name: memory_turns
+    type: number
+    required: false
+    default: 10
+    min: 0
+    max: 50
+    label:
+      en_US: Memory Turns
+      zh_Hans: 记忆轮数
+      ja_JP: メモリターン数
+      pt_BR: Turnos de Memória
+    human_description:
+      en_US: Number of previous conversation turns to include as history. 0 disables history.
+      zh_Hans: 作为历史记录包含的先前对话轮数。0禁用历史记录。
+      ja_JP: 履歴として含める以前の会話ターン数。0で履歴を無効にします。
+      pt_BR: Número de turnos anteriores da conversa a incluir como histórico. 0 desativa o histórico.
+
+extra:
+  python:
+    source: strategies/sandbox-agent.py
